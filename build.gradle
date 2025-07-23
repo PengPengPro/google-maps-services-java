@@ -1,0 +1,52 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+import java.time.Duration
+
+buildscript {
+  ext {
+      agp_version = '3.4.2'
+  }
+    repositories {
+      google()  // 必须包含 Google 的 Maven 仓库
+      mavenCentral()
+      jcenter()
+      maven { url 'https://maven.google.com' }
+  }
+  dependencies {
+    classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.3'
+//      classpath 'com.android.tools.build:gradle:8.0.0'  // 确保使用正确的 AGP 版本
+      // 其他依赖（如 Kotlin 插件）
+      classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0'
+      classpath "com.android.tools.build:gradle:$agp_version" // 示例
+  }
+}
+
+allprojects {
+  repositories {
+    google()  // 必须包含 Google 的 Maven 仓库
+    mavenCentral()
+    jcenter()
+    maven { url 'https://maven.google.com' }
+  }
+}
+
+
+task clean(type: Delete) {
+  delete rootProject.buildDir
+}
+
+ext {
+
+  baseVersion = "26.0.2"
+  rxJavaVersion = "2.1.0"
+  rxAndroidVersion = "2.1.0" //20220826修改
+  fastjsonVersion = '1.2.76'
+  retrofit2Version = '2.2.0'
+  rxlifecycle='2.2.1'
+
+  buildToolsVersion = "30.0.3"
+  targetSdkVersion = 35 //
+
+  minSdkVersion =  15
+  supportVersion = "26.0.2"
+
+}

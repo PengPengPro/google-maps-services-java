@@ -1,0 +1,113 @@
+apply plugin: 'com.android.library'
+//apply plugin: 'com.android.application'
+
+//plugins {
+//    id 'com.android.library'
+////    id 'com.github.ben-manes.versions' version '0.51.0'
+////    id 'com.github.sherter.google-java-format' version '0.9'
+////    id "io.github.gradle-nexus.publish-plugin" version "2.0.0"
+//}
+android {
+
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
+
+    defaultConfig {
+        //uses-sdk:minSdkVersion 15 cannot be smaller than version 16 declared in library [com.github.razerdp:BasePopup:2.2.9]
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetSdkVersion
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
+        /*
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName()]
+                includeCompileClasspath false
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+        */
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+
+        androidTest.setRoot('tests')
+        androidTest.java.srcDirs = ['tests/src']
+    }
+
+    dexOptions {
+        //DexException: Cannot merge new index 65536 into a non-jumbo instruction
+        jumboMode true
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    // 显式声明注解处理器
+    annotationProcessor 'com.google.appengine:appengine-api-1.0-sdk:2.0.31'
+    compileOnly 'com.google.appengine:appengine-api-1.0-sdk:2.0.31'
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
+    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'io.opencensus:opencensus-api:0.31.1'
+    //implementation 'org.slf4j:slf4j-api:2.0.16'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.11.0'
+    testImplementation 'org.apache.httpcomponents:httpclient:4.5.14'
+//    testImplementation 'org.slf4j:slf4j-simple:2.0.16'
+    testImplementation 'org.slf4j:slf4j-api:1.7.36'
+    testImplementation 'org.apache.commons:commons-lang3:3.17.0'
+    testImplementation 'org.json:json:20240303'
+    testImplementation 'io.opencensus:opencensus-impl:0.31.1'
+    testImplementation "org.mockito:mockito-inline:5.2.0"
+
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+
+}
+
+/*
+nexusPublishing {
+    packageGroup = "com.google.maps"
+    repositories {
+        sonatype {
+            username = sonatypeUsername
+            password = sonatypePassword
+            clientTimeout = Duration.ofSeconds(120)
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.MapsJavaUtils
+}*/
